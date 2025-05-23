@@ -4,17 +4,24 @@
 @section('title', 'ToDo-List')
 
 @section('content')
+    @if(session('success'))
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+            {{ session('success') }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    @endif
+
     <div class="bg-light min-vh-100">
 
         <div class="container-fluid container-md justify-content-center p-4 align-items-center pt-5">
             <div class="row g-3">
-                <h1 class="text-center">Add Item ToDo-List</h1>
+                <h1 class="text-center">Add Task to To-Do List</h1>
 
                 <form action="{{route('tasks.create')}}" method="POST">
                     @csrf
                     <div class="d-flex">
                         <input class="form-control mr-2" required type="text" name="title" placeholder="Title">
-                        <button type="submit" class="btn btn-primary">Add</button>
+                        <button type="submit" class="btn btn-primary ms-2">Add</button>
                     </div>
                 </form>
             </div>
@@ -22,7 +29,7 @@
 
         <div class="container-fluid container-md justify-content-center p-4 align-items-center pt-5">
             {{-- List task --}}
-            <h1 class="text-center">ToDo-List</h1>
+            <h1 class="text-center">To-Do List</h1>
             <ul class="list-group">
                 @foreach ($tasks as $task)
                     <li class="list-group-item d-flex justify-content-between align-items-center">
@@ -38,16 +45,18 @@
                                     {{ $task->status === 'selesai' ? 'checked' : '' }}
                                     id="taskCheck{{ $task->id }}"
                                 >
-                                @if ($task->status === 'selesai')
-                                    <div class="text-primary">Selesai</div>
-                                @else
-                                    <div class="text-danger">Belum</div>
-                                @endif
-                                <label class="form-check-label" for="taskCheck{{ $task->id }}">
-                                    <span style="text-decoration: {{ $task->is_done ? 'line-through' : 'none' }}">
-                                        {{ $task->title }}
-                                    </span>
-                                </label>
+                                <div class="d-flex">
+                                    @if ($task->status === 'selesai')
+                                        <span class="badge text-bg-success" style="height: min-content">Selesai</span>
+                                    @else
+                                        <span class="badge text-bg-danger" style="height: min-content">Belum</span>
+                                    @endif
+                                    <label class="form-check-label ps-1" for="taskCheck{{ $task->id }}">
+                                        <span style="text-decoration: {{ $task->is_done ? 'line-through' : 'none' }}">
+                                            {{ $task->title }}
+                                        </span>
+                                    </label>
+                                </div>
                             </div>
                         </form>
 
